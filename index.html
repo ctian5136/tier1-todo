@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap');
+
+              /* setting the width of the body */
+            body {
+                margin: 0;
+                min-width: 250px;
+                font-family: 'Raleway', sans-serif;
+            }
+
+            /* setting the border and padding of an element */
+            * {
+                box-sizing: border-box;
+            }
+
+            /* setting the margins and padding of the list elements */
+            ul {
+                margin: 200;
+                padding: 200;
+            }
+
+            /* styling the items in the list with padding and default colors */
+            ul li {
+                cursor: pointer;
+                position: relative;
+                padding: 12px 8px 12px 40px;
+                list-style-type: none;
+                background: #e9edc9;
+                font-size: 18px;
+                transition: 0.2s;
+            
+            /* make the items unselectable by default */
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+
+            /* Darker background-color on hover */
+            ul li:hover {
+                background: #ccd5ae;
+            }
+
+            /* after clicking on a task, gray out the row and strike through the text */
+            ul li.checked {
+                background: #fefae0;
+                color: #737070;
+                text-decoration: line-through;
+            }
+
+            /* add a check mark to the rows that have been clicked on to indicate completeness */
+            ul li.checked::before {
+                content: '';
+                position: absolute;
+                border-color: #737070;
+                border-style: solid;
+                border-width: 0 2px 2px 0;
+                top: 10px;
+                left: 16px;
+                transform: rotate(45deg);
+                height: 15px;
+                width: 7px;
+            }
+
+            /* positioning of the clear task "x" button */
+            .close {
+                position: absolute;
+                right: 0;
+                top: 0;
+                padding: 12px 16px 12px 16px;
+            }
+
+            /* when hovering over the "x" button, highlight with this style */
+            .close:hover {
+                background-color: #ff6666;
+                color: white;
+            }
+
+            /* styling the header */
+            .header {
+                background-color: #d4a373;
+                padding: 30px 40px;
+                color: white;
+                text-align: center;
+            }
+
+            /* clear any floats after the header */
+            .header:after {
+                content: "";
+                display: table;
+                clear: both;
+            }
+
+            /* styling the text input box */
+            input {
+                margin: auto;
+                border: none;
+                border-radius: 0;
+                width: 50%;
+                padding: 10px;
+                float: none;
+                font-size: 16px;
+                font-family: 'Raleway', sans-serif;
+            }
+
+            /* styling the button to add tasks */
+            .addBtn {
+                padding: 10px;
+                width: 25%;
+                background: #faedcd;
+                color: #555;
+                float: none;
+                text-align: center;
+                font-size: 16px;
+                cursor: pointer;
+                transition: 0.3s;
+                border-radius: 0;
+            }
+
+            .addBtn:hover {
+                background-color: #bbb;
+            }
+             /* styling important tasks button */
+             .importantBtn {
+                padding: 10px;
+                width: 10%;
+                background: #faedcd;
+                color: #555;
+                float: none;
+                font-size: 16px;
+                cursor: pointer;
+                transition: 0.3s;
+                border-radius: 0;
+            }
+
+            .importantBtn:hover {
+                color: green;
+            }
+
+        </style>
+    </head>
+
+    <body>
+        <!-- title -->
+        <div id="header" class="header">
+            <h2 style="margin:5px">Things I Must Do</h2>
+            <!-- task input box -->
+            <input type="text" id="inputText" placeholder="input task...">
+            <!-- event handler for important task button -->
+            <span onclick="important = true;changeStar();" class="importantBtn" id="imptBtn">&#9734;</span>
+             <!-- event handler for add task button -->
+            <span onclick="newElement()" class="addBtn">Add to List</span>
+        </div>
+
+         <!-- to do lists, important and normal-->
+        <div id="importantTasks">
+            <h4 style="margin:20px">IMPORTANT TASKS &#x1F31F</h4>
+            <ul id="importantList">
+                <li>Tier 2 to do app</li>
+            </ul>
+        </div>
+        
+        <div id="nomralTasks">
+            <h4 style="margin:20px">TASKS</h4>
+            <ul id="normalList">
+                <li>Read readings</li>
+                <li>Finish painting</li>
+                <li class="checked">Tier 1 to do app</li>
+                <li>Reply to emails</li>
+            </ul>
+        </div>
+        
+        <script>
+        // set the default important-ness to false
+            important = false;
+        // fill the star in on click
+            function changeStar(){
+                document.getElementById('imptBtn').innerHTML = String.fromCodePoint(0x1F31F);
+            }
+        // create a close button for each item in the list
+            var myNodelist = document.getElementsByTagName("LI");
+            var i;
+            for (i = 0; i < myNodelist.length; i++) {
+                var span = document.createElement("SPAN");
+                var txt = document.createTextNode("\u00D7");
+                span.className = "close";
+                span.appendChild(txt);
+                myNodelist[i].appendChild(span);
+            }
+
+        // clicking on the close button hides the element in the list
+            var close = document.getElementsByClassName("close");
+            var i;
+            for (i = 0; i < close.length; i++) {
+                close[i].onclick = function() {
+                    var div = this.parentElement;
+                    div.style.display = "none";
+                }
+            }
+
+        // after clicking on an item in the list, append a check button to the row
+            var list = document.querySelector('ul');
+            list.addEventListener('click', function(ev) {
+                if (ev.target.tagName === 'LI') {
+                        ev.target.classList.toggle('checked');
+                }
+            }, false);
+
+        // after clicking the add button, add a new element to the list based on the input text
+            function newElement() {
+                // create the list element 
+                var li = document.createElement("li");
+                // take in the input text from the user input box
+                var inputValue = document.getElementById("inputText").value;
+                // create a textNode with the input value
+                var t = document.createTextNode(inputValue);
+                // make the text a list element and append to the list
+                li.appendChild(t);
+                // if the user tries to add a task without inputting anything in the box, throw an alert
+                if (inputValue === '') {
+                        alert("You must write something!");
+                    } else {
+                        // adds tasks to lists based on important or not
+                        if(important == true){
+                            document.getElementById("importantList").appendChild(li);
+                        }
+                        if(important == false){
+                            document.getElementById("normalList").appendChild(li);
+                        }
+                    }
+                document.getElementById("inputText").value = "";
+                // make a close button for the new element
+                var span = document.createElement("SPAN");
+                var txt = document.createTextNode("\u00D7");
+                span.className = "close";
+                span.appendChild(txt);
+                li.appendChild(span);
+                // if the close button is pressed, hide the element
+                for (i = 0; i < close.length; i++) {
+                        close[i].onclick = function() {
+                        var div = this.parentElement;
+                        div.style.display = "none";
+                    }
+                }
+                // set the important-ness back to false and revert the icon
+                important = false;
+                document.getElementById("imptBtn").innerHTML = String.fromCodePoint(0x2606);
+            }
+
+        </script>
+
+    </body>
+</html>
+
+
