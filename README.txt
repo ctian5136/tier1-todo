@@ -22,3 +22,6 @@ https://www.w3schools.com/css/css3_fonts.asp
 
 Raleway/Quicksand Font:
 https://fonts.google.com/specimen/Quicksand
+
+Star Unicode:
+https://unicode-table.com/en/1F31F/
